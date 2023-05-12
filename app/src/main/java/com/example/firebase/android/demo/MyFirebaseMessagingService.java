@@ -1,5 +1,6 @@
 package com.example.firebase.android.demo;
 
+import com.google.firebase.messaging.RemoteMessage.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -29,7 +30,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             String notificationBody = remoteMessage.getNotification().getBody();
             if (remoteMessage.getNotification().getBody() != null) {
-                sendNotification(notificationBody);
+                sendNotification(remoteMessage.getNotification());
             }
         }
 
@@ -50,7 +51,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
         // TODO: Implement this method to send token to your app server.
     }
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(Notification notification) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -61,8 +62,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_stat_ic_notification)
-                        .setContentTitle(getString(R.string.fcm_message))
-                        .setContentText(messageBody)
+                        .setContentTitle(notification.getTitle())
+                        .setContentText(notification.getBody())
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
