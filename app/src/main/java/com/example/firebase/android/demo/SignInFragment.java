@@ -137,7 +137,7 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void onAuthSuccess(FirebaseUser user) {
-        String username = usernameFromEmail(user.getEmail());
+        String userName = usernameFromEmail(user.getEmail());
 
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -153,7 +153,7 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
                         String msg = getString(R.string.msg_token_fmt, appInstanceToken);
                         Log.d(TAG, msg);
 
-                        writeNewUser(user.getUid(), username, user.getEmail(), appInstanceToken);
+                        writeNewUser(user.getUid(), userName, user.getEmail(), appInstanceToken);
 
                     }
                 });
@@ -161,7 +161,7 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
         askNotificationPermission();
 
         // Write new user
-        writeNewUser(user.getUid(), username, user.getEmail(), null);
+        writeNewUser(user.getUid(), userName, user.getEmail(), null);
 
         // Go to MainFragment
         NavHostFragment.findNavController(this).navigate(R.id.action_SignInFragment_to_MainFragment);
