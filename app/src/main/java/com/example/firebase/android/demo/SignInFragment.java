@@ -40,6 +40,17 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
 
     private FragmentSignInBinding binding;
 
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    Toast.makeText(getContext(), "Notifications permission granted",Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    Toast.makeText(getContext(), "FCM can't post notifications without POST_NOTIFICATIONS permission",
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -139,13 +150,15 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
 
                         // Get new FCM registration token
                         String appInstanceToken = task.getResult();
-                        String msg = "getString(R.string.msg_token_fmt, appInstanceToken)";
+                        String msg = getString(R.string.msg_token_fmt, appInstanceToken);
                         Log.d(TAG, msg);
 
                         writeNewUser(user.getUid(), username, user.getEmail(), appInstanceToken);
 
                     }
                 });
+
+        askNotificationPermission();
 
         // Write new user
         writeNewUser(user.getUid(), username, user.getEmail(), null);
@@ -193,6 +206,19 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
             signIn();
         } else if (i == R.id.buttonSignUp) {
             signUp();
+        }
+    }
+
+    private void askNotificationPermission() {
+        // This is only necessary for API Level > 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                // FCM SDK (and your app) can post notifications.
+            } else {
+                // Directly ask for the permission
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
         }
     }
 

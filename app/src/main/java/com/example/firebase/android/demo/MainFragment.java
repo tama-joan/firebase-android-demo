@@ -50,6 +50,7 @@ public class MainFragment extends Fragment implements MenuProvider {
         FragmentStateAdapter mPagerAdapter = new FragmentStateAdapter(getParentFragmentManager(),
                 getViewLifecycleOwner().getLifecycle()) {
             private final Fragment[] mFragments = new Fragment[]{
+                    new MainDetailFragment()
 //                    new RecentPostsFragment(),
 //                    new MyPostsFragment(),
 //                    new MyTopPostsFragment(),
@@ -69,9 +70,10 @@ public class MainFragment extends Fragment implements MenuProvider {
         // Set up the ViewPager with the sections adapter.
         binding.container.setAdapter(mPagerAdapter);
         String[] mFragmentNames = new String[]{
-                getString(R.string.heading_recent),
-                getString(R.string.heading_my_posts),
-                getString(R.string.heading_my_top_posts)
+                "main"
+//                getString(R.string.heading_recent),
+//                getString(R.string.heading_my_posts),
+//                getString(R.string.heading_my_top_posts)
         };
         new TabLayoutMediator(binding.tabs, binding.container,
                 (tab, position) -> tab.setText(mFragmentNames[position])

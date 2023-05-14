@@ -16,6 +16,7 @@
             app:popUpTo="@id/MainFragment"
             app:destination="@id/MainFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/MainFragment"
         android:name="com.example.firebase.android.demo.MainFragment"
@@ -24,6 +25,7 @@
 <!--        <action-->
 <!--            android:id="@+id/action_MainFragment_to_NewPostFragment"-->
 <!--            app:destination="@id/NewPostFragment" />-->
+
         <action
             android:id="@+id/action_MainFragment_to_SignInFragment"
             app:popUpTo="@id/SignInFragment"
@@ -53,4 +55,15 @@
 <!--            app:popUpTo="@id/MainFragment">-->
 <!--        </action>-->
 <!--    </fragment>-->
+
+<!--    <fragment android:id="@+id/MainDetailFragment"-->
+<!--        android:name="com.example.firebase.android.demo.MainDetailFragment"-->
+<!--        android:label="@string/app_name"-->
+<!--        tools:layout="@layout/fragment_main_detail">-->
+<!--        <action-->
+<!--            android:id="@+id/action_MainDetailFragment_to_SignInFragment"-->
+<!--            app:popUpTo="@id/SignInFragment"-->
+<!--            app:destination="@id/SignInFragment" />-->
+<!--    </fragment>-->
+
 </navigation>

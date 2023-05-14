@@ -19,33 +19,26 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.firebase.android.demo.databinding.ActivityMainBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private ActivityMainBinding binding;
-
     private FloatingActionButton fab;
 
     private NavController navController;
 
-    private final ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted) {
-                    Toast.makeText(this, "Notifications permission granted",Toast.LENGTH_SHORT)
-                            .show();
-                } else {
-                    Toast.makeText(this, "FCM can't post notifications without POST_NOTIFICATIONS permission",
-                            Toast.LENGTH_LONG).show();
-                }
-            });
+//    private final ActivityResultLauncher<String> requestPermissionLauncher =
+//            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+//                if (isGranted) {
+//                    Toast.makeText(this, "Notifications permission granted",Toast.LENGTH_SHORT)
+//                            .show();
+//                } else {
+//                    Toast.makeText(this, "FCM can't post notifications without POST_NOTIFICATIONS permission",
+//                            Toast.LENGTH_LONG).show();
+//                }
+//            });
 
 
     @Override
@@ -63,15 +56,13 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+
                 if (destination.getId() == R.id.MainFragment) {
                     fab.setVisibility(View.VISIBLE);
                     fab.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            //navController.navigate(R.id.action_MainFragment_to_NewPostFragment);
-                            Log.d(TAG, "msg");
-                            askNotificationPermission();
-
+                            navController.navigate(R.id.action_SignInFragment_to_MainFragment);
                         }
                     });
                 } else {
@@ -81,17 +72,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void askNotificationPermission() {
-        // This is only necessary for API Level > 33 (TIRAMISU)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
-                    PackageManager.PERMISSION_GRANTED) {
-                // FCM SDK (and your app) can post notifications.
-            } else {
-                // Directly ask for the permission
-                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
-            }
-        }
-    }
+//    private void askNotificationPermission() {
+//        // This is only necessary for API Level > 33 (TIRAMISU)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
+//                    PackageManager.PERMISSION_GRANTED) {
+//                // FCM SDK (and your app) can post notifications.
+//            } else {
+//                // Directly ask for the permission
+//                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+//            }
+//        }
+//    }
 
 }

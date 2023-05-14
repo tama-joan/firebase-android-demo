@@ -1,12 +1,16 @@
 package com.example.firebase.android.demo;
 
+import com.example.firebase.android.demo.models.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.RemoteMessage.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -20,6 +24,8 @@ import com.google.firebase.messaging.RemoteMessage;
 public class MyFirebaseMessagingService extends FirebaseMessagingService{
 
     private static final String TAG = "MyFirebaseMsgService";
+
+    private DatabaseReference mDatabase;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -48,7 +54,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
 
 
     private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
+        // write new token to database
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        String userId = firebaseUser.getUid();
+        User user = new User(userId, firebaseUser.getEmail(), token);
+
+        mDatabase.child("users").child(userId).setValue(user);
     }
 
     private void sendNotification(Notification notification) {
